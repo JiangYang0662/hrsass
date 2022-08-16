@@ -93,7 +93,7 @@ const service = axios.create({
 service.interceptors.request.use(async config => {
   if (store.getters.token) {
     if (IsCheckTimeOut()) {
-      await store.dispatch('user/lgout')
+      await store.dispatch('user/logout')
       router.push('/login')
       return Promise.reject(new Error('token过期了,请重新登陆'))
     }

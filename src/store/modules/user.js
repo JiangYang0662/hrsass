@@ -89,11 +89,12 @@
 // }
 
 import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
-import { login } from '@/api/user'
+import { login, getUserInfo, getUserDetailById } from '@/api/user'
 // 状态
 const state = {
   // token: null
-  token: getToken()
+  token: getToken(),
+  userInfo: {}
 }
 // 修改状态
 const mutations = {
@@ -106,6 +107,16 @@ const mutations = {
   removeToken(state) {
     state.token = null // 将vuex的数据置空
     removeToken() // 同步到缓存
+  },
+  // 缓存用户信息
+  setUserInfo(state, userInfo) {
+    state.userInfo = { ...userInfo } // 响应式-浅拷贝
+    // state.userInfo = userInfo 响应式-深拷贝
+    // state.userInfo['username'] = userInfo 不是响应式
+  },
+  // 删除用户信息
+  reomveUserInfo(state) {
+    state.userInfo = {} // 空对象的值为undefined，null的对象则会报错
   }
 }
 // 执行异步
@@ -135,9 +146,20 @@ const actions = {
   //   })
   // }
 
+  // 获取用户信息
+  async getUserInfo(context) {
+    const result = await getUserInfo()
+    // 通过getUserInfo获取用户id
+    const baseInfo = await getUserDetailById(result.userId)
+    const baseResult = { ...result, ...baseInfo } // 把两个接口的数据合并
+    context.commit('setUserInfo', baseResult)
+    return baseResult // 给用户权限赋值做伏笔
+  },
+
   // 登出
-  lgout({ commit }) {
-    commit('removeToken')
+  logout(context) {
+    context.commit('removeToken') // 删除token
+    context.commit('reomveUserInfo') // 删除用户信息
   }
 }
 

@@ -82,7 +82,7 @@ import { Message } from 'element-ui'
 import { getTimeStamp } from './auth'
 import router from '@/router'
 import store from '@/store'
-const TimeOut = 5 * 60 * 60// token过期时间
+const TimeOut = 24 * 60 * 60 // token过期时间
 // 1. 导出一个axios实例，要求有请求拦截器和响应拦截器
 // 创建一个axios的实例
 const service = axios.create({
@@ -99,7 +99,7 @@ service.interceptors.request.use(async config => {
     }
     config.headers.Authorization = `Bearer ${store.getters.token}`
   }
-  return config
+  return config // 必须返回config
 }, error => {
   return Promise.reject(error)
 })

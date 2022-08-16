@@ -74,7 +74,7 @@ const whiteList = ['/login', '/404'] // 定义白名单  所有不受权限控�
 // to:到哪里去
 // from 在哪里来
 // next 是必须执行的钩子 next()放行 next(false)跳转终止 next(地址)跳转到某个地址
-router.beforeEach(function(to, from, next) {
+router.beforeEach(async function(to, from, next) {
   NProgress.start() // 开启进度条
   //  首先判断有无token
   if (store.getters.token) {
@@ -82,6 +82,10 @@ router.beforeEach(function(to, from, next) {
     if (to.path === '/login') {
       next('/') // 跳到主页
     } else {
+      // 判断之前是否以获取过用户信息
+      if (!store.getters.userId) {
+        await store.dispatch('user/getUserInfo')
+      }
       next() // 直接放行
     }
   } else {

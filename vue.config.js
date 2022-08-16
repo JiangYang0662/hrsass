@@ -6,13 +6,16 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || 'vue Admin Template' // page title
+const name = defaultSettings.title || 'vue Admin Template' // page title 网页标题
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
 // For example, Mac: sudo npm run
 // You can change the port by the following methods:
 // port = 9528 npm run dev OR npm run dev --port = 9528
+// port 端口
+// process.env.port实际上是一个node.js服务下的环境变量
+// 设置开发环境的接口可以直接在.enc.development中写入对于port变量的赋值
 const port = process.env.port || process.env.npm_config_port || 9528 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
@@ -35,8 +38,18 @@ module.exports = {
     overlay: {
       warnings: false,
       errors: true
-    }
+    },
     // before: require('./mock/mock-server.js')
+    // 配置代理跨域，得注释掉mock，否则会影响跨域
+    proxy: {
+      // 当出现/api时触发,targer指向新的域，api接口可以有多个，如/abc等
+      // changeOrigin 是否跨域
+      // pathRewrite 重新路径，可以api省略掉
+      '/api': {
+        target: 'http://ihrm-java.itheima.net/',
+        changOrigin: true
+      }
+    }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

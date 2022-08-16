@@ -3,13 +3,6 @@
 // import store from '@/store'
 // import { getToken } from '@/utils/auth'
 
-// // create an axios instance 使用create创建一个新的axios实例
-// const service = axios.create({
-//   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-//   // withCredentials: true, // send cookies when cross-domain requests
-//   timeout: 5000 // request timeout 超时时间
-// })
-
 // // request interceptor 请求拦截器
 // service.interceptors.request.use(
 //   config => {
@@ -84,9 +77,55 @@
 
 // export default service
 
-// 导出一个axios实例，要求有请求拦截器和响应拦截器
 import axios from 'axios'
-const service = axios.create() // 创建一个axios的实例
-service.interceptors.request.use() // 请求拦截器
-service.interceptors.response.use() // 响应拦截器
+import { Message } from 'element-ui'
+import { getTimeStamp } from './auth'
+import router from '@/router'
+import store from '@/store'
+const TimeOut = 5 * 60 * 60// token过期时间
+// 1. 导出一个axios实例，要求有请求拦截器和响应拦截器
+// 创建一个axios的实例
+const service = axios.create({
+  baseURL: process.env.VUE_APP_BASE_API,
+  timeout: 5 * 1000
+})
+// 请求拦截器
+service.interceptors.request.use(async config => {
+  if (store.getters.token) {
+    if (IsCheckTimeOut()) {
+      await store.dispatch('user/lgout')
+      router.push('/login')
+      return Promise.reject(new Error('token过期了,请重新登陆'))
+    }
+    config.headers.Authorization = `Bearer ${store.getters.token}`
+  }
+  return config
+}, error => {
+  return Promise.reject(error)
+})
+// 响应拦截器
+service.interceptors.response.use(response => {
+  const { success, message, data } = response.data
+  if (success) {
+    return data
+  } else {
+    Message.error(message)
+    return Promise.reject(new Error(message))
+  }
+}, error => {
+  if (error.response && error.response.data && error.response.data.code === 10002) {
+    store.dispatch('user/lgout')
+    router.push('/login')
+  } else {
+    Message.error(error.message)
+  }
+
+  return Promise.reject(error)
+})
+// 检查超时
+function IsCheckTimeOut() {
+  var currentTime = Date.now()
+  var timestamp = getTimeStamp()
+  return (currentTime - timestamp) / 1000 > TimeOut
+}
 export default service // 导出axios实例

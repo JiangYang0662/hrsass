@@ -1,12 +1,14 @@
-// import request from '@/utils/request'
+import request from '@/utils/request'
 
-// export function login(data) {
-//   return request({
-//     url: '/vue-admin-template/user/login',
-//     method: 'post',
-//     data
-//   })
-// }
+// 登录接口
+export function login(data) {
+// 通过return返回一个promise对象
+  return request({
+    url: '/sys/login',
+    method: 'post',
+    data
+  })
+}
 
 // export function getInfo(token) {
 //   return request({
@@ -22,11 +24,6 @@
 //     method: 'post'
 //   })
 // }
-
-// 重写
-export function login(data) {
-
-}
 
 export function getInfo(token) {
 

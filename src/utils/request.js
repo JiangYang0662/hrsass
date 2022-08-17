@@ -114,7 +114,7 @@ service.interceptors.response.use(response => {
   }
 }, error => {
   if (error.response && error.response.data && error.response.data.code === 10002) {
-    store.dispatch('user/lgout')
+    store.dispatch('user/logout')
     router.push('/login')
   } else {
     Message.error(error.message)

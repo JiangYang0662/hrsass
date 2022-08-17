@@ -149,6 +149,7 @@ const actions = {
   // 获取用户信息
   async getUserInfo(context) {
     const result = await getUserInfo()
+    console.log(result)
     // 通过getUserInfo获取用户id
     const baseInfo = await getUserDetailById(result.userId)
     const baseResult = { ...result, ...baseInfo } // 把两个接口的数据合并

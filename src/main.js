@@ -11,6 +11,8 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
+import Component from '@/components' // 全局注册组件
+import * as filters from '@/filters' // 导入过滤器工具
 
 import '@/icons' // icon
 import '@/permission' // permission control 权限
@@ -33,11 +35,16 @@ import * as directive from '@/directives' // 自定义指令 * as为导入所有
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
-
+Vue.use(Component) // 注册自己的插件
 // 遍历指令
 Object.keys(directive).forEach(key => {
   // 注册自定义指令
   Vue.directive(key, directive[key])
+})
+// 注册全局的过滤器
+Object.keys(filters).forEach(key => {
+  // 注册自定义指令
+  Vue.filter(key, filters[key])
 })
 Vue.config.productionTip = false
 

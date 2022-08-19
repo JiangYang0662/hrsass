@@ -1,6 +1,11 @@
+<!-- 首页页面 -->
+
 <template>
   <div class="dashboard-container">
+    <page-tools />
     <div class="dashboard-text">name: {{ name }}</div>
+    <upload-excel />
+    <image-upload />
   </div>
 </template>
 

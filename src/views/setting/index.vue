@@ -162,7 +162,7 @@ export default {
         await this.$refs.roleForm.validate()
         if (this.roleForm.id) {
           // 编辑角色提交
-          await updateRole(this.formData)
+          await updateRole(this.roleForm)
         } else {
           // alert('新增角色')
           await addRole(this.roleForm)

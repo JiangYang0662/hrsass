@@ -53,7 +53,7 @@
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
-              <el-button type="text" size="small">角色</el-button>
+              <el-button type="text" size="small" @click="editRole(row.id)">角色</el-button>
               <el-button type="text" size="small" @click="deleteEmployee(row.id)">删除</el-button>
             </template>
           </el-table-column>
@@ -77,6 +77,12 @@
         <canvas ref="myCanvas" />
       </el-row>
     </el-dialog>
+    <!-- 角色弹窗 -->
+    <assign-role
+      ref="assignRole"
+      :show-role-dialog.sync="showRoleDialog"
+      :user-id="userId"
+    />
   </div>
 </template>
 
@@ -87,8 +93,10 @@ import AddEmployee from './components/add-employee.vue'
 import addEmployee from './components/add-employee.vue'
 import { formatDate } from '@/filters'
 import QrCode from 'qrcode'
+import AssignRole from './components/assign-role.vue'
+
 export default {
-  components: { addEmployee },
+  components: { addEmployee, AssignRole },
   data() {
     return {
       loading: false,
@@ -99,7 +107,9 @@ export default {
         total: 0
       },
       showDialog: false,
-      showCodeDialog: false
+      showCodeDialog: false,
+      showRoleDialog: false,
+      userId: ''
     }
   },
   computed: {
@@ -242,6 +252,12 @@ export default {
       } else {
         this.$message.warning('该用户还未上传头像')
       }
+    },
+    // 9. 点击角色--弹窗--获取当前角色id
+    async editRole(id) {
+      this.userId = id // props传值异步，有时间差
+      await this.$refs.assignRole.getUserDetailById(id) // 父组件调用子组件获取当前用户的角色，异步调用
+      this.showRoleDialog = true
     }
   }
 }

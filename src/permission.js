@@ -84,9 +84,17 @@ router.beforeEach(async function(to, from, next) {
     } else {
       // 判断之前是否以获取过用户信息
       if (!store.getters.userId) {
-        await store.dispatch('user/getUserInfo')
+        // 获取用户UserInfo里roles的menus的路由权限数据
+        const { roles } = await store.dispatch('user/getUserInfo')
+        console.log(roles)
+        // ++ 筛选用户的可以用路由
+        // const routes = await store.dispatch('permission/filterRoutes', roles.menus)
+        const routes = await store.dispatch('permission/filterRoutes', roles.menus)
+        router.addRoutes(routes, { path: '*', redirect: '/404', hidden: true })
+        next(to.path)
+      } else {
+        next() // 直接放行
       }
-      next() // 直接放行
     }
   } else {
     // 没有token,在白名单里找是否有地址

@@ -2,7 +2,7 @@ import Layout from '@/layout'
 
 export default {
   path: '/setting',
-  name: 'setting', // 可以区分权限
+  name: 'settings', // 可以区分权限
   component: Layout,
   // 二级路由
   children: [{

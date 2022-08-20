@@ -2,7 +2,7 @@ import Layout from '@/layout'
 
 export default {
   path: '/social',
-  name: 'social', // 可以区分权限
+  name: 'social_securitys', // 可以区分权限
   component: Layout,
   // 二级路由
   children: [{

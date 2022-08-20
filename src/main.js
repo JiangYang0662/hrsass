@@ -17,6 +17,7 @@ import * as filters from '@/filters' // 导入过滤器工具
 import '@/icons' // icon
 import '@/permission' // permission control 权限
 import * as directive from '@/directives' // 自定义指令 * as为导入所有的自定义指令
+import checkPermission from '@/mixin/checkPermission'
 
 /**
  * If you don't want to use mock-server
@@ -46,6 +47,8 @@ Object.keys(filters).forEach(key => {
   // 注册自定义指令
   Vue.filter(key, filters[key])
 })
+// 注册全局的混入对象
+Vue.mixin(checkPermission) // 所有的组件都拥有检查权限的方法
 Vue.config.productionTip = false
 
 new Vue({

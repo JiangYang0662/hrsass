@@ -90,6 +90,7 @@
 
 import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
 import { login, getUserInfo, getUserDetailById } from '@/api/user'
+import { resetRouter } from '@/router'
 // 状态
 const state = {
   // token: null
@@ -161,6 +162,10 @@ const actions = {
   logout(context) {
     context.commit('removeToken') // 删除token
     context.commit('reomveUserInfo') // 删除用户信息
+    resetRouter() // 退出时恢复静态路由--该方法在src/router/index
+    // 权限路由清空--调用modules下的permission模块的setRoutes方法
+    // 若直接在父模块调用可以加 {root:true}作为第三个参数
+    context.commit('permission/setRoutes', [], { root: true })
   }
 }
 

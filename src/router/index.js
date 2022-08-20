@@ -87,22 +87,23 @@ export const constantRoutes = [
       path: '', // 二级路由path什么都不写 表示二级默认路由
       component: () => import('@/views/import')
     }]
-  },
+  }
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  // { path: '*', redirect: '/404', hidden: true } // -- 转义到新路由的最后
 ]
 
 // 左侧导航栏的显示
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  // routes: constantRoutes
-  routes: [...constantRoutes, ...asyncRoutes]
+  routes: constantRoutes // 静态路由+登陆时验证用户权限调取动态路由
+  // routes: [...constantRoutes, ...asyncRoutes]  临时的静态路由+动态路由
 })
 
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
+// 重置路由--登出的时候调用，把路由回归到静态路由状态
 export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router

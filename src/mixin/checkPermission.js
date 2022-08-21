@@ -6,7 +6,8 @@ export default {
     // 检查权限
     checkPermission(key) {
       const { userInfo } = store.state.user // 得到store模块下user里的userInfo
-      if (userInfo.roles.points && userInfo.roles.points.length) {
+      console.log(userInfo, '检查权限')
+      if (userInfo && userInfo.roles && userInfo.roles.points && userInfo.roles.points.length) {
         return userInfo.roles.points.some(item => item === key)
       }
       return false

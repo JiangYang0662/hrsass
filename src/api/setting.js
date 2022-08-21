@@ -61,7 +61,7 @@ export function assignRoles(data) {
 // 8. 给用户分配角色权限
 export function assignPerm(data) {
   return request({
-    url: '/sys/role/assignPrem',
+    url: '/sys/role/assignPerm',
     method: 'put',
     data
   })

@@ -40,6 +40,7 @@ import attendancesRouter from './modules/attendances'
 import salarysRouter from './modules/salarys'
 import settingRouter from './modules/setting'
 import socialRouter from './modules/social'
+import userRouter from './modules/user'
 // 1. 动态路由
 export const asyncRoutes = [
   approvalsRouter,
@@ -72,7 +73,7 @@ export const constantRoutes = [
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
-      name: 'Dashboard',
+      name: 'dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页页面', icon: 'dashboard' }
     }]
@@ -87,14 +88,18 @@ export const constantRoutes = [
       path: '', // 二级路由path什么都不写 表示二级默认路由
       component: () => import('@/views/import')
     }]
-  }
+  },
+  userRouter
   // 404 page must be placed at the end !!!
   // { path: '*', redirect: '/404', hidden: true } // -- 转义到新路由的最后
 ]
 
 // 左侧导航栏的显示
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  // 路由模式hasg：#后面是前端访问，#后面的变化不会经过服务器
+  // 路由模式history: /访问，任意的地址变化都要经过服务器
+  mode: 'history', // require service support,
+  // base:'/...',配置项目的一个基础地址，类似代替了#
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes // 静态路由+登陆时验证用户权限调取动态路由
   // routes: [...constantRoutes, ...asyncRoutes]  临时的静态路由+动态路由
